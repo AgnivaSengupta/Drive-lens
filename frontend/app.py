@@ -120,6 +120,8 @@ if "sessions_loaded" not in st.session_state:
     st.session_state.sessions_loaded = False
 if "backend_online" not in st.session_state:
     st.session_state.backend_online = True
+if "custom_users" not in st.session_state:
+    st.session_state.custom_users = {}
 
 
 def api(method: str, path: str, **kwargs):
@@ -238,24 +240,29 @@ def switch_user(next_user_id: str) -> None:
     st.session_state.sessions_loaded = False
     st.rerun()
 
+
 # sidebar
 with st.sidebar:
-    st.markdown("### 🗂️ TailorTalk")
+    st.markdown("### 🗂️ Drive Lens")
 
-    profile_labels = list(DEMO_USERS.keys())
+    all_users = {**DEMO_USERS, **st.session_state.custom_users}
+
     current_label = next(
-        (label for label, uid in DEMO_USERS.items() if uid == user_id),
-        "Custom",
+        (label for label, uid in all_users.items() if uid == user_id),
+        user_id,  # fallback: show raw ID if somehow not in dict
     )
-    select_options = profile_labels + (["Custom"] if current_label == "Custom" else [])
+    profile_labels = list(all_users.keys())
+    if current_label not in profile_labels:
+        profile_labels.append(current_label)
+
     selected_label = st.selectbox(
         "Profile",
-        select_options,
-        index=select_options.index(current_label),
+        profile_labels,
+        index=profile_labels.index(current_label),
     )
 
-    if selected_label != "Custom" and DEMO_USERS[selected_label] != user_id:
-        switch_user(DEMO_USERS[selected_label])
+    if all_users.get(selected_label, selected_label) != user_id:
+        switch_user(all_users.get(selected_label, selected_label))
 
     profile = load_profile()
     st.caption(
@@ -263,12 +270,19 @@ with st.sidebar:
         f"{profile.get('memory_count', 0)} memories"
     )
 
-    with st.expander("Advanced"):
-        custom_user_id = st.text_input("Custom user ID", value=user_id)
-        if st.button("Switch profile", use_container_width=True):
-            next_user_id = custom_user_id.strip() or str(uuid.uuid4())
-            if next_user_id != user_id:
-                switch_user(next_user_id)
+    with st.expander("➕ Add custom profile"):
+        col_name, col_id = st.columns([2, 3])
+        with col_name:
+            new_label = st.text_input("Display name", placeholder="e.g. Alice")
+        with col_id:
+            new_uid = st.text_input(
+                "User ID", placeholder="leave blank to auto-generate"
+            )
+        if st.button("Add & switch", use_container_width=True):
+            uid = new_uid.strip() or str(uuid.uuid4())
+            label = new_label.strip() or uid[:12]
+            st.session_state.custom_users[label] = uid
+            switch_user(uid)
         st.caption(f"Current scope: `{user_id}`")
 
     st.divider()
