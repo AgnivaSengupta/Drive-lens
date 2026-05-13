@@ -5,9 +5,6 @@ from googleapiclient.discovery import build
 
 # 1. Setup Credentials
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-# SERVICE_ACCOUNT_FILE = (
-#     "./backend/credentials/service-account.json"  # The file you downloaded
-# )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service-account.json')
