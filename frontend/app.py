@@ -26,15 +26,22 @@ st.set_page_config(
 )
 
 st.markdown(
+    '<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
     """
 <style>
 
-    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
-
-    /* Apply the font to the entire Streamlit app */
-    html, body, [class*="css"], .stMarkdown {
-        font-family: 'Instrument Serif', serif;
+    html, body, div, p, span, button, input, textarea, select,
+    .stMarkdown, .stText, .stChatMessage, .stSidebar,
+    [data-testid="stSidebar"], [data-testid="stAppViewContainer"] {
+        font-family: 'Instrument Serif', serif !important;
+        letter-spacing: 0.05em !important;
+        font-size: 17px;
     }
+
 
     /* Hide default header/footer */
     #MainMenu {visibility: hidden;}
@@ -59,7 +66,7 @@ st.markdown(
 
     /* Sidebar styling */
     [data-testid="stSidebar"] {
-        background-color: #F7F7F8 !important;
+        background-color: #fff5d9 !important;
         border-right: none;
     }
 
