@@ -10,7 +10,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000").strip().rstrip("/")
+if not BACKEND_URL.startswith(("http://", "https://")):
+    BACKEND_URL = f"https://{BACKEND_URL}"
 DEMO_USERS = {
     "Demo User": "demo-user",
     "Recruiter Demo": "recruiter-demo",

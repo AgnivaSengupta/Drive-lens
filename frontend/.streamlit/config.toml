@@ -1,0 +1,16 @@
+[theme]
+# Change this to light to match your background colors
+base = "light" 
+
+primaryColor = "#6C63FF"
+
+# I recommend making the main background pure white for readability...
+backgroundColor = "#ffffff" 
+
+# ...and using the soft cream/gray color for the sidebar to separate it
+secondaryBackgroundColor = "#fff5d9" 
+
+textColor = "#141412"
+
+# Keep this as "serif". Streamlit only accepts "sans serif", "serif", or "monospace" here.
+font = "serif"
